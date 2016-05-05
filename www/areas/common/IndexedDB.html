@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  IndexedDB练习页面
+</body>
+<script type="text/javascript">
+
+  // 获取indexdb对象,为了兼容性的写法
+  // 1、获取对象
+  window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+  window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+  window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+  window.IDBCursor = window.IDBCursor || window.webkitIDBCursor || window.msIDBCursor;
+
+  // 2、定义数据库的基本信息
+  var dbInfo = {
+    dbName: 'aptdb',
+    dbVersion: 2019, //用小数会四舍五入，版本号只能越来越大
+    dbInstance: {},
+  };
+
+  // 3、创建数据库
+  var dbContent = window.indexedDB.open(dbInfo.dbName, dbInfo.dbVersion);
+
+  // 判断数据库版本号是够更新了（创建和修改表结构在这里操作）
+  // 如果数据库名称和版本号相同，那么该方法只执行一次
+  dbContent.onupgradeneeded = function (e) {
+
+    console.log(e);
+
+    // 4、创建数据库store(表)
+    var _db = e.target.result;
+    var storeNames = _db.objectStoreNames;
+
+    if (!storeNames.contains("cart")) {
+      // 创建一个表结构出来
+      _db.createObjectStore("cart", {
+        keyPath: "goodsId",//相当于关系型数据库中的主键
+        autoIncrement: true
+      });
+    }
+
+    // 样例数据
+//        var a={
+//          goodsId:123,
+//          name:"shiguqoing",
+//          age:32,
+//          number:"2354657"
+//        }
+
+    //        var b={
+//          goodsId:1234,
+//          name:"shiguqoing",
+//          age:32,
+//          number:"2354657"
+//        }
+
+  }
+
+  // 数据库创建成功时候的方法（增删改查操作）
+  dbContent.onsuccess = function (e) {
+
+    // 5、增删改查操作，开启事物,每次只能做一件事情
+    var _db = e.target.result;
+    var trans = _db.transaction(["cart"], "readwrite")
+    var store = trans.objectStore("cart")
+
+    // 虽然可以在一次成功打开请求的操作中同时操作多次增删改查命令，但是不推荐，以为这样前面的操作就不能被监听到了
+    // 增加数据
+//    var req=store.add({
+//      goodsId:'df6',
+//      prise:12.3,
+//      name:"衣服",
+//      size:"M",
+//      age:99
+//    })
+
+
+
+    // 修改数据
+//    var req = store.put({
+//      goodsId: 'df8',
+//      prise: 12.3,
+//      name: "衣服",
+//      size: "g"
+//    })
+
+    // 删除数据
+//    var req = store.delete("df7");
+
+    // 查询数据
+//    var req = store.get("df");
+
+    // 删除所有数据
+//    var req = store.clear();
+
+//    req.onsuccess=function(e){
+//      console.log("执行了");
+//    }
+//
+//    req.onerror=function(){
+
+//    }
+
+
+    // 查询所有数据（用了游标）
+    var cursor=store.openCursor();
+    var data=[];
+
+    cursor.onsuccess=function(e){
+      var result = e.target.result;
+      if (result && result !== null) {
+        data.push(result.value);
+        // 重新执行onsuccess句柄
+        result.continue();
+      }
+      console.log(data);
+    }
+    cursor.onerror=function(){
+
+    }
+
+  }
+
+
+  // 数据库创建失败
+  dbContent.onerror = function (e) {
+    alert("数据库链接失败");
+  }
+
+
+</script>
+</html>

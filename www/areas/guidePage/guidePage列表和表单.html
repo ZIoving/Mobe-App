@@ -1,0 +1,33 @@
+<ion-view view-title="guidePage">
+  <ion-header-bar class="positive-bg">
+    <h1 class="title">标题</h1>
+  </ion-header-bar>
+  <ion-content class="calm-bg">
+    <ion-list>
+      <ion-item>1
+        <ion-option-button>删除</ion-option-button>
+        <ion-option-button>修改</ion-option-button>
+      </ion-item>
+      <ion-item>2
+        复选按钮的选中状态是：{{select}}
+        <ion-checkbox ng-model="select">中国</ion-checkbox>
+      </ion-item>
+      <ion-item>3
+        单选按钮的选中值是：{{choice.choice}}
+        <ion-radio ng-repeat="item in radioList" ng-model="choice.choice" ng-value="item.value">{{item.name}}</ion-radio>
+      </ion-item>
+      <ion-item>4
+        开发的闭合状态是:{{kg}}
+        <ion-toggle ng-model="kg">开关</ion-toggle>
+      </ion-item>
+      <ion-item>5</ion-item>
+      <ion-item>6</ion-item>
+      <ion-item>7</ion-item>
+    </ion-list>
+
+  </ion-content>
+  <ion-footer-bar class="royal-bg">
+    底部
+  </ion-footer-bar>
+
+</ion-view>

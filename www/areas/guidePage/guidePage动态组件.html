@@ -1,0 +1,20 @@
+<ion-view view-title="guidePage">
+  <button ng-click="show()">弹出actionsheet</button>
+  <!--<button ng-click="openModal()">弹出模态窗</button>-->
+  <button ng-click="openPopover()">弹出popover</button>
+
+  <script id="a.html" type="text/ng-template">
+    <ion-modal-view class="royal-bg">
+      <button ng-click="closeModal()">关闭模态窗</button>
+      弹出层
+    </ion-modal-view>
+  </script>
+
+  <script id="popover.html" type="text/ng-template">
+    <ion-popover-view class="calm-bg light padding" style="height: 400px">
+      <p>这里应该有些帮助信息....</p>
+    </ion-popover-view>
+  </script>
+
+</ion-view>
+
